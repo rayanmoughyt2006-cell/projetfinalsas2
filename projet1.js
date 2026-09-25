@@ -1,3 +1,18 @@
+const couleurs = {
+  reset: "\x1b[0m",
+  rouge: "\x1b[31m",
+  vert: "\x1b[32m",
+  jaune: "\x1b[33m",
+  bleu: "\x1b[34m",
+  magenta: "\x1b[35m",
+  cyan: "\x1b[36m",
+  gras: "\x1b[1m",
+};
+
+function colorer(texte, code) {
+  return code + texte + couleurs.reset;
+}
+
 const prompt = require('prompt-sync')();
 const candidats = [
   { cin: "AB123456", nom: "Boushaba", prenom: "Soufiane", partiPolitique: "Indépendant", age: 40, electeurs: ["EL001"] },
@@ -11,24 +26,29 @@ const candidats = [
   { cin: "ST901234", nom: "Mansouri", prenom: "Rachid", partiPolitique: "Indépendant", age: 55, electeurs: ["EL114", "EL115", "EL116", "EL117", "EL118", "EL119", "EL120", "EL121", "EL122", "EL123", "EL124", "EL125", "EL126", "EL127"] },
   { cin: "UV012345", nom: "Benali", prenom: "Meryem", partiPolitique: "Parti de la Justice", age: 29, electeurs: ["EL128", "EL129", "EL130", "EL131", "EL132", "EL133", "EL134", "EL135", "EL136", "EL137", "EL138", "EL139", "EL140", "EL141", "EL142", "EL143", "EL144", "EL145", "EL146", "EL147"] }
 ];
- console.log("======================");
- console.log("   MENU PRINCEPAL   ");
- console.log("======================");
- console.log("1. Ajouter un Nouveau cadidat")
- console.log("2. Ajouter plusieurs candidats à la fois")
- console.log("3. Afficher la liste des candidats :")
- console.log("4. Voter pour un candidat")
- console.log("5. Modifier les informations d'un candidat ")
- console.log("6. Supprimer un candidat")
- console.log("7. Rechercher des candidats ")
- console.log("8. Statistiques de l'élection ")
- console.log("0. Quitte")
+ console.log(colorer("======================", couleurs.jaune));
+console.log(colorer("   MENU PRINCIPAL   ", couleurs.jaune));
+console.log(colorer("======================", couleurs.jaune));
+console.log(colorer("1. Ajouter un nouveau candidat", couleurs.jaune));
+console.log(colorer("2. Ajouter plusieurs candidats à la fois", couleurs.jaune));
+console.log(colorer("3. Afficher la liste des candidats", couleurs.jaune));
+console.log(colorer("4. Voter pour un candidat", couleurs.jaune));
+console.log(colorer("5. Modifier les informations d'un candidat", couleurs.jaune));
+console.log(colorer("6. Supprimer un candidat", couleurs.jaune));
+console.log(colorer("7. Rechercher des candidats", couleurs.jaune));
+console.log(colorer("8. Statistiques de l'élection", couleurs.jaune));
+console.log(colorer("0. Quitter", couleurs.jaune));
 
 let choix = Number(prompt("Entrez votre Choix :"));
 
 function Ajoutercandidat ()
 {
+    console.log(`=====================================
+  Ajouter un nouveau candidat
+====================================== `
+,couleurs.vert)
     let cin = prompt("entrez votre cin : ")
+    cin  = cin.toUpperCase();
         let  result= candidats.find(cand => cand.cin === cin)
                 if (result)
                 {
@@ -59,10 +79,12 @@ function Ajouterplusieurscandidats()
 {
     console.log(`==========================================
   Ajouter plusieurs candidats à la fois
-========================================== `)
+========================================== `
+,couleurs.vert)
     let x = Number(prompt("entrez le nomber de condida vous avez ajoute : "))
     for (let i = 1; i <= x;i++){
          let cin = prompt(`entrez le cin de condida n° ${i}: `)
+         cin = cin.toUpperCase();
            let  result= candidats.find(cand => cand.cin === cin)
                if (result)
             {
@@ -91,10 +113,10 @@ function Ajouterplusieurscandidats()
 
 
 function AfficherListeCandidats (){
-     console.log(`==========================================
-  Afficher la liste des candidats
-========================================== 
-`)
+     console.log(colorer(`===============================
+Afficher la liste des candidats
+===============================
+`, couleurs.vert));
 console.log(`1. Afichage Simple
 2. Afichage par Parti Politique
 3. Afichage par Nomber de votes 
@@ -140,7 +162,7 @@ if(parti === "" || parti === null)
 
             `)
     }
-    break:
+    break;
 
 
 case 3:
@@ -148,13 +170,65 @@ case 3:
          Afichage par Nomber de votes 
 ==========================================
 `)
-for (let i = 0; i < candidats.length; i++)
+for (let i = 0; i < candidats.length - 1; i++)
 {
-    
+    for (let j = 0; j < candidats.length - 1; j++)
+    {
+        if(candidats[j].electeurs.length  < candidats[j + 1].electeurs.length )
+            {
+                let temp = candidats[j].electeurs.length;
+                candidats[j].electeurs.length = candidats[j+1].electeurs.length;
+                candidats[j+1].electeurs.length = temp
+            }
+            for(let i = 0; i < candidats.length;i++)
+                {
+                    console.log(`# candidat : ${i + 1} , nom : ${candidats[i].nom}, prenom : ${candidats[i].prenom} , partiPolitique : ${candidats[i].partiPolitique}, age : ${candidats[i].age} , Vote : ${candidats[i].electeurs.length}`)
+                    console.log("")
+                }
+    }  
 }
+   break;
+
+   default:
+    console.log(colorer("Ce choix n’est pas disponible!!", couleurs.rouge));
 }
 }
 
+
+function VoterpourunCandidat (){
+    console.log(colorer(`===============================
+Voter pour un candidat
+===============================
+`, couleurs.vert))
+let electeur = prompt(" Entrez votre cin : ")
+    electeur = electeur.toUpperCase();
+if( electeur === "" || electeur === null)
+    {
+        console.log("Votre CIN est vide", couleurs.rouge)
+    }
+ else if(!(electeur === "" || electeur === null)) 
+    {
+    for (let i = 0; i <candidats.length;i++)
+       {
+         for (let j = 0; j < candidats[i].electeurs.length; j++)
+             {
+                if (electeur === candidats[i].electeurs[j])
+                    {
+                        console.log("Cet électeur a déjà voté", couleurs.rouge)
+                        break;
+                    }
+            }
+       let candidaPourVote = prompt("Entrez la CIN de votre candidat : ")
+                candidaPourVote = candidaPourVote.toUpperCase();
+                let result = candidats.find(Pvite => Pvite.cin === candidaPourVote);
+                if (result)
+                    {
+                        result.electeurs.push(electeur);
+                        console.log("Votre vote a été ajouté", couleurs.vert);
+                    }
+    }
+}       
+}            
 
 
 
@@ -169,6 +243,10 @@ switch (choix) {
         Ajouterplusieurscandidats();
         break;
   case 3:
-    AfficherListeCandidats ();
-    break;
+       AfficherListeCandidats ();
+       break;
+  case 4:
+       VoterpourunCandidat();
+       break;
+
 }
