@@ -195,40 +195,89 @@ for (let i = 0; i < candidats.length - 1; i++)
 }
 
 
-function VoterpourunCandidat (){
+/*function VoterpourunCandidat (){
     console.log(colorer(`===============================
 Voter pour un candidat
 ===============================
 `, couleurs.vert))
-let electeur = prompt(" Entrez votre cin : ")
-    electeur = electeur.toUpperCase();
-if( electeur === "" || electeur === null)
+let  = prompt("entrez votre cin :")
+if(electeur === "" || electeur === null){
+    console.log("votre cin vide :", couleurs.rouge)
+}
+electeur = electeur.toUpperCase();
+for(let i = 0;i < candidats.length;i++)
     {
-        console.log("Votre CIN est vide", couleurs.rouge)
+    for (let j = 0; j < candidats.electeurs.length; j++)
+        {
+        if(electeurs === candidats[i].electeurs[j])
+          {
+            console.log("vous avez deja vote !!");
+            break;
+          }
+        }
+}
+}*/
+function Modification(){
+    console.log(colorer(`========================================
+Modifier les informations d'un candidat
+=========================================
+`, couleurs.vert))
+let ask1 = prompt("votre cin S’il vous plaît :")
+ask1 = ask1.toUpperCase()
+let test = false;
+for (let i = 0; i < candidats.length; i++)
+{
+    if(ask1 == candidats[i].cin)
+    {
+        test = true;
     }
- else if(!(electeur === "" || electeur === null)) 
+}
+const index = candidats.findIndex(candidat => candidat.cin === ask1)
+if (test == true)
+{
+    let ask2 = prompt("Que souhaitez-vous modifier ((age ou partiPolitique))?")
+    if (ask2 === "age")
     {
-    for (let i = 0; i <candidats.length;i++)
-       {
-         for (let j = 0; j < candidats[i].electeurs.length; j++)
-             {
-                if (electeur === candidats[i].electeurs[j])
-                    {
-                        console.log("Cet électeur a déjà voté", couleurs.rouge)
-                        break;
-                    }
+         var chnge = Number(prompt("Entrez la nouvelle valeur"))
+    }
+    else if(ask2 === "partiPolitique")
+        {
+            var chnge = prompt("Entrez la nouvelle valeur")
+        }
+    candidats[index][ask2] = chnge;
+    console.log("La modification a été effectuée")
+}
+else
+{
+    console.log("Cette CIN ne figure pas dans la liste des candidats!!", couleurs.rouge)
+}
+}
+     
+function  SupprimerunCandidat(){
+    console.log(colorer(`================================
+   Supprimer un candidat
+================================
+`, couleurs.vert))
+
+let ask1 = prompt("Entrez la CIN du candidat que vous souhaitez supprimer")
+ask1 = ask1.toUpperCase() 
+let test = false;
+for(let i = 0; i < candidats.length;i++){
+        if(ask1 == candidats[i].cin)
+        
+            {
+                test = true;
             }
-       let candidaPourVote = prompt("Entrez la CIN de votre candidat : ")
-                candidaPourVote = candidaPourVote.toUpperCase();
-                let result = candidats.find(Pvite => Pvite.cin === candidaPourVote);
-                if (result)
-                    {
-                        result.electeurs.push(electeur);
-                        console.log("Votre vote a été ajouté", couleurs.vert);
-                    }
     }
-}       
-}            
+    if (test == true)
+    {
+        let index  = candidats.findIndex(candidat => candidat.cin === ask1)
+        candidats.splice(index, 1);
+        console.log(candidats)
+    }else{
+         console.log("Cette CIN ne figure pas dans la liste des candidats!!", couleurs.rouge)
+    }
+}
 
 
 
@@ -246,7 +295,10 @@ switch (choix) {
        AfficherListeCandidats ();
        break;
   case 4:
-       VoterpourunCandidat();
+       //VoterpourunCandidat();
        break;
-
+ case 5:
+    Modification();
+ case 6:
+    SupprimerunCandidat();
 }
