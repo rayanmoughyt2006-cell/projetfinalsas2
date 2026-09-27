@@ -26,21 +26,6 @@ const candidats = [
   { cin: "ST901234", nom: "mansouri", prenom: "Rachid", partiPolitique: "Indépendant", age: 55, electeurs: ["EL114", "EL115", "EL116", "EL117", "EL118", "EL119", "EL120", "EL121", "EL122", "EL123", "EL124", "EL125", "EL126", "EL127"] },
   { cin: "UV012345", nom: "benali", prenom: "Meryem", partiPolitique: "Parti de la Justice", age: 29, electeurs: ["EL128", "EL129", "EL130", "EL131", "EL132", "EL133", "EL134", "EL135", "EL136", "EL137", "EL138", "EL139", "EL140", "EL141", "EL142", "EL143", "EL144", "EL145", "EL146", "EL147"] }
 ];
- console.log(colorer("======================", couleurs.jaune));
-console.log(colorer("   MENU PRINCIPAL   ", couleurs.jaune));
-console.log(colorer("======================", couleurs.jaune));
-console.log(colorer("1. Ajouter un nouveau candidat", couleurs.jaune));
-console.log(colorer("2. Ajouter plusieurs candidats à la fois", couleurs.jaune));
-console.log(colorer("3. Afficher la liste des candidats", couleurs.jaune));
-console.log(colorer("4. Voter pour un candidat", couleurs.jaune));
-console.log(colorer("5. Modifier les informations d'un candidat", couleurs.jaune));
-console.log(colorer("6. Supprimer un candidat", couleurs.jaune));
-console.log(colorer("7. Rechercher des candidats", couleurs.jaune));
-console.log(colorer("8. Statistiques de l'élection", couleurs.jaune));
-console.log(colorer("0. Quitter", couleurs.jaune));
-
-let choix = Number(prompt("Entrez votre Choix :"));
-
 function Ajoutercandidat ()
 {
     console.log(`=====================================
@@ -135,6 +120,8 @@ case 1:
         console.log(`# le condidat : ${candidats[i+1]} :`)
         console.log(`CIN : ${candidats[i].cin}`)
         console.log(`Nom : ${candidats[i].nom}`)
+        console.log(`=============================
+            `)
     }
       break;
 
@@ -176,17 +163,18 @@ for (let i = 0; i < candidats.length - 1; i++)
     {
         if(candidats[j].electeurs.length  < candidats[j + 1].electeurs.length )
             {
-                let temp = candidats[j].electeurs.length;
-                candidats[j].electeurs.length = candidats[j+1].electeurs.length;
-                candidats[j+1].electeurs.length = temp
+                let temp = candidats[j];
+                candidats[j] = candidats[j+1];
+                candidats[j+1] = temp
             }
-            for(let i = 0; i < candidats.length;i++)
+    }
+}
+     for(let b = 0; b < candidats.length;b++)
                 {
-                    console.log(`# candidat : ${i + 1} , nom : ${candidats[i].nom}, prenom : ${candidats[i].prenom} , partiPolitique : ${candidats[i].partiPolitique}, age : ${candidats[i].age} , Vote : ${candidats[i].electeurs.length}`)
+                    console.log(`# candidat : ${b + 1} , nom : ${candidats[b].nom}, prenom : ${candidats[b].prenom} , partiPolitique : ${candidats[b].partiPolitique}, age : ${candidats[b].age} , Vote : ${candidats[b].electeurs.length}`)
                     console.log("")
                 }
-    }  
-}
+
    break;
 
    default:
@@ -195,29 +183,39 @@ for (let i = 0; i < candidats.length - 1; i++)
 }
 
 
-/*function VoterpourunCandidat (){
+
+
+function VoterpourunCandidat (){
 
     console.log(colorer(`===============================
 Voter pour un candidat
 ===============================
 `, couleurs.vert))
-let  = prompt("entrez votre cin :")
-if(electeur === "" || electeur === null){
-    console.log("votre cin vide :", couleurs.rouge)
-}
-electeur = electeur.toUpperCase();
-for(let i = 0;i < candidats.length;i++)
-    {
-    for (let j = 0; j < candidats.electeurs.length; j++)
-        {
-        if(electeurs === candidats[i].electeurs[j])
-          {
-            console.log("vous avez deja vote !!");
-            break;
-          }
+let cinElecteurMin = prompt(" saisir votre propre CIN : ")
+    let cinElecteur = cinElecteurMin.toUpperCase()
+    let position2=[]
+    for (let i=0;i<candidats.length;i++){
+        if (candidats[i].electeurs.includes(cinElecteur)){
+            position2.push(i)
         }
+    }
+    if(position2.length>0){
+        console.log("Vous avez déjà voté et vous n'avez pas le droit de modifier votre vote ni de voter à nouveau")
+        return false
+    }else {
+        let candidatVotedCinMin = prompt("donnez moi le cin du candidat que vous voulais voter sur lui : ")
+        let candidatVotedCin = candidatVotedCinMin.toUpperCase()
+        let resultIndex = candidats.findIndex(candidat => candidat.cin === candidatVotedCin);
+        if(resultIndex>-1){
+            candidats[resultIndex].electeurs.push(cinElecteur)
+            console.log("vous avez voter avec succes!")
+            return true   
+        }
+        console.log("votre candidat n'existe pas")
+        return false
+        }   
+
 }
-}*/
 
 
 function Modification(){
@@ -225,7 +223,7 @@ function Modification(){
 Modifier les informations d'un candidat
 =========================================
 `, couleurs.vert))
-let ask1 = prompt("votre cin S’il vous plaît :")
+let ask1 = prompt("Entrez le CIN du candidat dont vous voulez modifier les informations: ")
 ask1 = ask1.toUpperCase()
 let test = false;
 for (let i = 0; i < candidats.length; i++)
@@ -238,14 +236,16 @@ for (let i = 0; i < candidats.length; i++)
 const index = candidats.findIndex(candidat => candidat.cin === ask1)
 if (test == true)
 {
-    let ask2 = prompt("Que souhaitez-vous modifier ((age ou partiPolitique))?")
-    if (ask2 === "age")
+    let ask2 = (prompt("Que souhaitez-vous modifier ((age ou partiPolitique) tape 1 ou 2 : )?"))
+    if (ask2 == 1)
     {
-         var chnge = Number(prompt("Entrez la nouvelle valeur"))
+        ask2 = "age"
+         var chnge = Number(prompt("Entrez la nouvelle valeur : "))
     }
-    else if(ask2 === "partiPolitique")
+    else if(ask2 == 2)
         {
-            var chnge = prompt("Entrez la nouvelle valeur")
+            ask2 = "partiPolitique";
+            var chnge = prompt("Entrez la nouvelle valeur : ")
         }
     candidats[index][ask2] = chnge;
     console.log("La modification a été effectuée")
@@ -262,7 +262,7 @@ function  SupprimerunCandidat(){
 ================================
 `, couleurs.vert))
 
-let  ask1 = prompt("Entrez la CIN du candidat que vous souhaitez supprimer")
+let  ask1 = prompt("Entrez la CIN du candidat que vous souhaitez supprimer : ")
 ask1 = ask1.toUpperCase() 
 let test = false;
 for(let i = 0; i < candidats.length;i++){
@@ -276,7 +276,7 @@ for(let i = 0; i < candidats.length;i++){
     {
         let index  = candidats.findIndex(candidat => candidat.cin === ask1)
         candidats.splice(index, 1);
-        console.log(candidats)
+         console.log("Le candidat a été supprimé avec succès !")
     }else{
          console.log("Cette CIN ne figure pas dans la liste des candidats!!", couleurs.rouge)
     }
@@ -296,7 +296,7 @@ if (index == -1){
 }
 else {
     console.log("===Résultat de votre recherche===")
-    console.log(`candidat : ${index - 1}, cin : ${candidats[index].cin} , age : ${candidats[index].age}, nom : ${ask1} , prenom : ${candidats[index].prenom}, partipolitique : ${candidats[index].partiPolitique}, vote : ${candidats[index].electeurs.length}`)
+    console.log(`candidat : ${index + 1}, cin : ${candidats[index].cin} , age : ${candidats[index].age}, nom : ${ask1} , prenom : ${candidats[index].prenom}, partipolitique : ${candidats[index].partiPolitique}, vote : ${candidats[index].electeurs.length}`)
 }
 }
 
@@ -347,17 +347,54 @@ switch (ask1){
                     console.log(`candidat n° : ${i + 1} , NOM: ${candidats[i].nom},  Prenom : ${candidats[i].prenom} ,   PartiPolitique : ${candidats[i].partiPolitique},   Votes : ${candidats[i].electeurs.length}`)
              }
             break;
-    case 4:
+    case 4:  
         console.log(`=== Vous avez choisi le Choix n° ${ask1} ===
             `)
-            
+            let arr = []
+        for (let candidat of candidats)
+        {
+            arr.push(candidat.partiPolitique)
+        }
+       let deja = [];
+        for(let j = 0 ; j < arr.length;j++){
+            if (!deja.includes(arr[j])){
+            let cmpter = 0;
+            for (let i = 0 ; i < arr.length; i++)
+            {
+                if(arr[j] === arr[i])
+                    cmpter++;
+            }
+            console.log(`le parti : ${arr[j]} contient :${cmpter}`)
+            deja.push(arr[j]);
         }
     }
+    break;
 
+    default :
+    console.log(colorer("Ce choix n’est pas disponible!!", couleurs.rouge));
+}
+}
+
+while (true){
+    console.log(colorer("======================", couleurs.jaune));
+console.log(colorer("   MENU PRINCIPAL   ", couleurs.jaune));
+console.log(colorer("======================", couleurs.jaune));
+console.log(colorer("1. Ajouter un nouveau candidat", couleurs.jaune));
+console.log(colorer("2. Ajouter plusieurs candidats à la fois", couleurs.jaune));
+console.log(colorer("3. Afficher la liste des candidats", couleurs.jaune));
+console.log(colorer("4. Voter pour un candidat", couleurs.jaune));
+console.log(colorer("5. Modifier les informations d'un candidat", couleurs.jaune));
+console.log(colorer("6. Supprimer un candidat", couleurs.jaune));
+console.log(colorer("7. Rechercher des candidats", couleurs.jaune));
+console.log(colorer("8. Statistiques de l'élection", couleurs.jaune));
+console.log(colorer("0. Quitter", couleurs.jaune));
+
+    let choix = Number(prompt("Entrez votre Choix :"));
+    if (choix == 0) {
+        console.log("quitter")
+        break
+    }
 switch (choix) {
-  case 0:
-    console.log("good by")
-        break;
   case 1:
         Ajoutercandidat();
         break;
@@ -368,14 +405,22 @@ switch (choix) {
        AfficherListeCandidats ();
        break;
   case 4:
-       //VoterpourunCandidat();
+       VoterpourunCandidat();
        break;
  case 5:
     Modification();
+    break;
  case 6:
     SupprimerunCandidat();
+    break;
  case 7:
     RechercherdesCandidats();
+    break;
  case 8:
     Statistiques();
+    break;
+
+     default :
+    console.log(colorer("Ce choix n’est pas disponible!!", couleurs.rouge));
+}
 }
